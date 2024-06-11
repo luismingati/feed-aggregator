@@ -64,22 +64,24 @@ The `middlewareAuth` function ensures that a valid API key is provided in the re
 
 ### Router Setup
 
-```go
-v1Router := chi.NewRouter()
+    v1Router := chi.NewRouter()
+    
+    v1Router.Get("/ready", handlerReadiness)
+    v1Router.Get("/error", handlerError)
+    
+    v1Router.Post("/users", apiCfg.handlerCreateUser)
+    v1Router.Get("/users", apiCfg.middlewareAuth(apiCfg.handlerGetUser))
+    
+    v1Router.Post("/feeds", apiCfg.middlewareAuth(apiCfg.handlerCreateFeed))
+    v1Router.Get("/feeds", apiCfg.handlerGetFeeds)
+    
+    v1Router.Post("/feeds-follows", apiCfg.middlewareAuth(apiCfg.handlerCreateFeedFollows))
+    v1Router.Get("/feeds-follows", apiCfg.middlewareAuth(apiCfg.handlerGetFeedFollows))
+    v1Router.Delete("/feeds-follows/{feedFollowID}", apiCfg.middlewareAuth(apiCfg.handlerDeleteFeedFollow))
+    
+    v1Router.Get("/posts", apiCfg.middlewareAuth(apiCfg.handlerGetPostsForUser))
+    
+    router.Mount("/v1", v1Router)
 
-v1Router.Get("/ready", handlerReadiness)
-v1Router.Get("/error", handlerError)
-
-v1Router.Post("/users", apiCfg.handlerCreateUser)
-v1Router.Get("/users", apiCfg.middlewareAuth(apiCfg.handlerGetUser))
-
-v1Router.Post("/feeds", apiCfg.middlewareAuth(apiCfg.handlerCreateFeed))
-v1Router.Get("/feeds", apiCfg.handlerGetFeeds)
-
-v1Router.Post("/feeds-follows", apiCfg.middlewareAuth(apiCfg.handlerCreateFeedFollows))
-v1Router.Get("/feeds-follows", apiCfg.middlewareAuth(apiCfg.handlerGetFeedFollows))
-v1Router.Delete("/feeds-follows/{feedFollowID}", apiCfg.middlewareAuth(apiCfg.handlerDeleteFeedFollow))
-
-v1Router.Get("/posts", apiCfg.middlewareAuth(apiCfg.handlerGetPostsForUser))
-
-router.Mount("/v1", v1Router)
+### Contributing
+If you'd like to contribute, please fork the repository and open a pull request to the `main` branch.
